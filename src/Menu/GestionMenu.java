@@ -19,20 +19,19 @@ public class GestionMenu {
     }
 
     public class ParteCompuesta extends ParteAbstracta {
-        private List<ParteAbstracta> partes = new ArrayList<>();
+        private List<ParteAbstracta> partesInternas = new ArrayList<>();
 
         public ParteCompuesta(String nombre) {
             super(nombre);
         }
 
         public void addParte(ParteAbstracta parte) {
-            partes.add(parte);
+            partesInternas.add(parte);
         }
 
         public List<ParteAbstracta> getPartes() {
-            return partes;
+            return partesInternas;
         }
-
     }
 
     public class ParteSimple extends ParteAbstracta {
@@ -42,7 +41,6 @@ public class GestionMenu {
     }
 
     public void crearMenu() {
-        List<ParteAbstracta> partes = new ArrayList<>();
         ParteCompuesta configuracion = new ParteCompuesta("0. Configuracion");
 
         ParteCompuesta tareas = new ParteCompuesta("0. Tareas");
@@ -63,14 +61,24 @@ public class GestionMenu {
         configuracion.addParte(new ParteSimple("3. Salir"));
 
         partes.add(configuracion);
-        partes.add()
-
+        partes.add(new ParteSimple("1. Xogar"));
+        partes.add(new ParteSimple("2. Salir"));
     }
 
     public void mostrarMenu() {
+        mostrarPartes(partes, 0);
+    }
+
+    private void mostrarPartes(List<ParteAbstracta> partes, int nivel) {
         for (ParteAbstracta parte : partes) {
-            //getNombre
-            System.out.println(parte.getNombre());            
+            for (int i = 0; i < nivel; i++) {
+                System.out.print("\t");
+            }
+            System.out.println(parte.getNombre());
+            if (parte instanceof ParteCompuesta) {
+                ParteCompuesta parteCompuesta = (ParteCompuesta) parte;
+                mostrarPartes(parteCompuesta.getPartes(), nivel + 1);
+            }
         }
     }
 }
